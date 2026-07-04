@@ -4,45 +4,39 @@ Expose any local port to the internet in one command. Get an instant HTTPS URL f
 
 Powered by [Cloudflare Tunnels](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) (free, no signup required).
 
-## Quick start
+Works on **macOS**, **Linux**, and **Windows**.
 
-```bash
-git clone https://github.com/Sam8r/local-webhook-master.git
-cd local-webhook-master
-chmod +x tunnel.sh
-./tunnel.sh
-```
+## Install
 
-```
-Which port(s) should I expose? (space-separated, Enter = 8000)
-> 8000
-
-════════════════════════════════════════════════════════════
-  ✅  1 tunnel(s) live
-
-  :8000  →  https://random-words-here.trycloudflare.com
-
-  Logs:   tail -f /tmp/cloudflared-tunnel-*.log
-  Stop:   Ctrl+C
-════════════════════════════════════════════════════════════
-```
-
-`Ctrl+C` stops all tunnels.
-
-## Install (one-liner)
-
-**macOS / Linux:**
+### macOS / Linux
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Sam8r/local-webhook-master/main/install.sh | bash
 ```
 
-This clones the repo to `~/.local-webhook-master`, symlinks `tunnel` into `/usr/local/bin`, and installs `cloudflared` on first run.
+### Windows (PowerShell)
 
-After install, run from anywhere:
+```powershell
+irm https://raw.githubusercontent.com/Sam8r/local-webhook-master/main/install.ps1 | iex
+```
+
+Open a **new terminal** after install, then:
 
 ```bash
 tunnel 8000
+```
+
+### Manual (no install)
+
+```bash
+git clone https://github.com/Sam8r/local-webhook-master.git
+cd local-webhook-master
+
+# macOS / Linux
+chmod +x tunnel.sh && ./tunnel.sh
+
+# Windows
+powershell -ExecutionPolicy Bypass -File tunnel.ps1
 ```
 
 ## Usage
@@ -53,9 +47,25 @@ tunnel 8000             # single port
 tunnel 8000 5173 8080   # multiple ports — each gets its own URL
 ```
 
+```
+Which port(s) should I expose? (space-separated, Enter = 8000)
+> 8000 5173
+
+════════════════════════════════════════════════════════════
+  ✅  2 tunnel(s) live
+
+  :8000  →  https://random-words-here.trycloudflare.com
+  :5173  →  https://different-words-there.trycloudflare.com
+
+  Stop:   Ctrl+C
+════════════════════════════════════════════════════════════
+```
+
+`Ctrl+C` stops all tunnels.
+
 ## How it works
 
-1. Checks for `cloudflared` — installs it automatically if missing (macOS + Linux, Intel + ARM)
+1. Checks for `cloudflared` — installs it automatically if missing
 2. Spawns a Cloudflare quick tunnel per port
 3. Waits for each URL, prints them
 4. `Ctrl+C` cleanly kills everything
@@ -64,7 +74,7 @@ No Cloudflare account, domain, or config file needed. URLs are random and tempor
 
 ## Requirements
 
-- macOS or Linux
+- macOS, Linux, or Windows
 - A local server running on the port(s) you want to expose
 
 ## License
